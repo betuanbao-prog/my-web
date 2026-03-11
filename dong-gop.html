@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Đóng Góp & Thành Tích – Lớp 12A8</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #0a1628;
+      --blue: #1565c0;
+      --gold: #f9a825;
+      --white: #ffffff;
+      --text-light: #b0bec5;
+      --accent: #f9a825;
+      --accent-glow: rgba(249,168,37,0.3);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #stars-canvas {
+      position: fixed; top:0; left:0;
+      width:100%; height:100%; z-index:0; pointer-events:none;
+    }
+    header {
+      position: sticky; top:0; z-index:100;
+      background: rgba(10,22,40,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--gold);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 68px;
+    }
+    .logo {
+      display:flex; align-items:center; gap:14px; text-decoration:none;
+    }
+    .logo-icon {
+      width:46px; height:46px;
+      background: linear-gradient(135deg, var(--blue), var(--gold));
+      border-radius:12px; display:flex; align-items:center; justify-content:center;
+      font-size:22px;
+    }
+    .logo-text { display:flex; flex-direction:column; line-height:1.2; }
+    .logo-text span:first-child { font-size:11px; color:var(--text-light); letter-spacing:1px; text-transform:uppercase; }
+    .logo-text span:last-child  { font-size:18px; font-weight:900; color:var(--gold); }
+    nav { display:flex; gap:6px; }
+    nav a {
+      display:flex; align-items:center; gap:6px;
+      padding:8px 16px; border-radius:8px;
+      text-decoration:none; font-size:13px; font-weight:600; color:var(--white);
+      transition: background 0.25s, color 0.25s, transform 0.2s;
+    }
+    nav a:hover { background:rgba(249,168,37,0.15); color:var(--gold); transform:translateY(-2px); }
+    .nav-emoji { font-size:15px; }
+
+    /* HERO */
+    .hero {
+      position:relative; z-index:1;
+      min-height: 70vh;
+      display:flex; align-items:center; justify-content:center;
+      text-align:center; padding:80px 20px 60px;
+    }
+    .hero-inner { max-width:700px; }
+    .back-link {
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:13px; color:var(--text-light);
+      text-decoration:none; margin-bottom:32px;
+      transition:color 0.2s;
+    }
+    .back-link:hover { color:var(--gold); }
+    .page-emoji {
+      font-size:72px; display:block; margin-bottom:24px;
+      animation: bounce 2.5s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%,100% { transform:translateY(0); }
+      50%      { transform:translateY(-12px); }
+    }
+    .hero-subtitle {
+      font-size:12px; letter-spacing:3px; text-transform:uppercase;
+      color:var(--accent); font-weight:700; margin-bottom:12px;
+    }
+    .hero-title {
+      font-family:'Playfair Display', serif;
+      font-size:clamp(36px, 7vw, 72px);
+      font-weight:900; line-height:1.1;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      margin-bottom:20px;
+    }
+    .hero-desc {
+      font-size:16px; color:var(--text-light);
+      line-height:1.7; max-width:540px; margin:0 auto 48px;
+    }
+
+    /* COMING SOON BOX */
+    .coming-box {
+      position:relative; z-index:1;
+      max-width:620px; margin:0 auto 80px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:24px; padding:56px 40px;
+      text-align:center;
+    }
+    .coming-box::before {
+      content:''; position:absolute;
+      inset:-1px; border-radius:24px;
+      background: linear-gradient(135deg, transparent, var(--accent-glow), transparent);
+      z-index:-1;
+    }
+    .coming-icon { font-size:56px; margin-bottom:20px; display:block; }
+    .coming-title {
+      font-size:24px; font-weight:800; margin-bottom:12px;
+      color:var(--white);
+    }
+    .coming-text {
+      font-size:15px; color:var(--text-light); line-height:1.6; margin-bottom:28px;
+    }
+    .btn-home {
+      display:inline-flex; align-items:center; gap:10px;
+      background:linear-gradient(135deg, var(--accent), var(--gold));
+      color:#000; font-weight:800; font-size:14px;
+      padding:14px 32px; border-radius:50px;
+      text-decoration:none;
+      transition:transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+    .btn-home:hover {
+      transform:translateY(-3px);
+      box-shadow: 0 8px 30px var(--accent-glow);
+    }
+
+    footer {
+      position:relative; z-index:1;
+      border-top:1px solid rgba(255,255,255,0.08);
+      padding:30px 40px; text-align:center;
+    }
+    footer p { font-size:13px; color:var(--text-light); }
+  </style>
+</head>
+<body>
+<canvas id="stars-canvas"></canvas>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">🎓</div>
+    <div class="logo-text">
+      <span>THPT Thành Phố Cao Bằng</span>
+      <span>LỚP 12A8</span>
+    </div>
+  </a>
+  <nav>
+    <a href="thanh-vien.html"><span class="nav-emoji">👥</span> Thành viên</a>
+    <a href="hanh-trinh.html"><span class="nav-emoji">📸</span> Kỷ niệm</a>
+    <a href="dong-gop.html" style="background:rgba(249,168,37,0.2);color:#f9a825;"><span class="nav-emoji">🏆</span> Thành tích</a>
+    <a href="gioi-thieu-truong.html"><span class="nav-emoji">🏫</span> Về trường</a>
+    <a href="blog.html"><span class="nav-emoji">✍️</span> Blog</a>
+    <a href="lien-he.html"><span class="nav-emoji">💌</span> Liên hệ</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <a href="index.html" class="back-link">← Về trang chính</a>
+    <span class="page-emoji">🏆</span>
+    <div class="hero-subtitle">✦ Achievements</div>
+    <h1 class="hero-title">Đóng Góp & Thành Tích</h1>
+    <p class="hero-desc">Tự hào trưng bày bằng khen, cúp vô địch, dự án thiện nguyện và những đóng góp cho nhà trường.</p>
+  </div>
+</section>
+
+<div style="position:relative;z-index:1;">
+  <div class="coming-box">
+    <span class="coming-icon">🚧</span>
+    <div class="coming-title">Đang xây dựng...</div>
+    <div class="coming-text">
+      Khu vực thành tích đang được xây dựng...<br/>
+      Hãy quay lại sớm nhé — chúng tớ đang làm hết sức! 💪
+    </div>
+    <a href="index.html" class="btn-home">← Về trang chính</a>
+  </div>
+</div>
+
+<footer>
+  <p>Made with ♥ by Lớp 12A8 · THPT Thành Phố Cao Bằng · 2024–2025</p>
+</footer>
+
+<script>
+  const canvas = document.getElementById('stars-canvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function resize() { canvas.width=innerWidth; canvas.height=innerHeight; }
+  function init() {
+    stars=[];
+    for(let i=0;i<160;i++) stars.push({
+      x:Math.random()*canvas.width, y:Math.random()*canvas.height,
+      r:Math.random()*1.4+0.2, o:Math.random(), s:Math.random()*0.3+0.05, d:Math.random()>.5?1:-1
+    });
+  }
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    stars.forEach(s=>{
+      s.o+=s.s*0.01*s.d; if(s.o>1||s.o<0.1) s.d*=-1;
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${s.o})`; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',()=>{resize();init();});
+  resize(); init(); draw();
+</script>
+</body>
+</html>

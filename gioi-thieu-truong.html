@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Giới Thiệu Về Trường – Lớp 12A8</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #0a1628;
+      --blue: #1565c0;
+      --gold: #f9a825;
+      --white: #ffffff;
+      --text-light: #b0bec5;
+      --accent: #43a047;
+      --accent-glow: rgba(67,160,71,0.3);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #stars-canvas {
+      position: fixed; top:0; left:0;
+      width:100%; height:100%; z-index:0; pointer-events:none;
+    }
+    header {
+      position: sticky; top:0; z-index:100;
+      background: rgba(10,22,40,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--gold);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 68px;
+    }
+    .logo { display:flex; align-items:center; gap:14px; text-decoration:none; }
+    .logo-icon {
+      width:46px; height:46px;
+      background: linear-gradient(135deg, var(--blue), var(--gold));
+      border-radius:12px; display:flex; align-items:center; justify-content:center;
+      font-size:22px;
+    }
+    .logo-text { display:flex; flex-direction:column; line-height:1.2; }
+    .logo-text span:first-child { font-size:11px; color:var(--text-light); letter-spacing:1px; text-transform:uppercase; }
+    .logo-text span:last-child  { font-size:18px; font-weight:900; color:var(--gold); }
+    nav { display:flex; gap:6px; }
+    nav a {
+      display:flex; align-items:center; gap:6px;
+      padding:8px 16px; border-radius:8px;
+      text-decoration:none; font-size:13px; font-weight:600; color:var(--white);
+      transition: background 0.25s, color 0.25s, transform 0.2s;
+    }
+    nav a:hover { background:rgba(249,168,37,0.15); color:var(--gold); transform:translateY(-2px); }
+    .nav-emoji { font-size:15px; }
+    @media (max-width: 768px) { nav { display:none; } header { padding: 0 20px; } }
+
+    .hero {
+      position:relative; z-index:1;
+      min-height: 65vh;
+      display:flex; align-items:center; justify-content:center;
+      text-align:center; padding:80px 20px 60px;
+    }
+    .hero-inner { max-width:700px; }
+    .back-link {
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:13px; color:var(--text-light);
+      text-decoration:none; margin-bottom:32px;
+      display:block; transition:color 0.2s;
+    }
+    .back-link:hover { color:var(--gold); }
+    .page-emoji { font-size:72px; display:block; margin-bottom:24px; animation: bounce 2.5s ease-in-out infinite; }
+    @keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-12px); } }
+    .hero-subtitle { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:12px; }
+    .hero-title {
+      font-family:'Playfair Display', serif;
+      font-size:clamp(28px, 5vw, 58px); font-weight:900; line-height:1.1;
+      background: linear-gradient(135deg, #fff 30%, var(--accent));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; margin-bottom:20px;
+    }
+    .hero-desc { font-size:16px; color:var(--text-light); line-height:1.7; max-width:540px; margin:0 auto; }
+
+    .stats-bar {
+      position:relative; z-index:1;
+      display:flex; justify-content:center; flex-wrap:wrap;
+      max-width:900px; margin:0 auto;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:20px; overflow:hidden;
+    }
+    .stat-item { flex:1; min-width:160px; padding:28px 20px; text-align:center; border-right:1px solid rgba(255,255,255,0.07); }
+    .stat-item:last-child { border-right:none; }
+    .stat-icon { font-size:28px; margin-bottom:8px; display:block; }
+    .stat-val { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; color:var(--gold); display:block; line-height:1; }
+    .stat-lbl { font-size:12px; color:var(--text-light); margin-top:5px; }
+
+    .content-section { position:relative; z-index:1; padding:80px 40px; max-width:1100px; margin:0 auto; }
+    .section-tag {
+      display:inline-block;
+      background:rgba(67,160,71,0.15); border:1px solid rgba(67,160,71,0.4);
+      color:var(--accent); font-size:11px; font-weight:700;
+      letter-spacing:2px; text-transform:uppercase;
+      padding:6px 16px; border-radius:50px; margin-bottom:18px;
+    }
+    .section-title { font-family:'Playfair Display',serif; font-size:clamp(24px,3.5vw,40px); font-weight:900; line-height:1.15; margin-bottom:16px; }
+    .section-body { font-size:15px; color:var(--text-light); line-height:1.8; max-width:660px; }
+    .divider { height:1px; background:linear-gradient(90deg,transparent,rgba(249,168,37,0.25),transparent); position:relative; z-index:1; }
+
+    .gallery-grid {
+      display:grid;
+      grid-template-columns: 1.5fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap:14px;
+      margin-top:40px;
+      height: 460px;
+    }
+    @media (max-width:700px) { .gallery-grid { grid-template-columns:1fr; height:auto; } }
+    .gallery-img { border-radius:14px; overflow:hidden; position:relative; border:1px solid rgba(255,255,255,0.08); }
+    .gallery-img.tall { grid-row: span 2; }
+    .gallery-img img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s ease; }
+    .gallery-img:hover img { transform:scale(1.05); }
+    .img-caption {
+      position:absolute; bottom:0; left:0; right:0;
+      background:linear-gradient(transparent,rgba(0,0,0,0.8));
+      padding:24px 14px 12px; font-size:13px; font-weight:600;
+      opacity:0; transition:opacity 0.3s;
+    }
+    .gallery-img:hover .img-caption { opacity:1; }
+
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:start; }
+    @media (max-width:768px) { .two-col { grid-template-columns:1fr; } }
+
+    .info-table { margin-top:28px; }
+    .info-row { display:flex; align-items:flex-start; gap:14px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
+    .info-row:last-child { border-bottom:none; }
+    .info-icon { font-size:20px; flex-shrink:0; margin-top:2px; }
+    .info-label { font-size:11px; color:var(--gold); font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:3px; }
+    .info-val { font-size:14px; color:var(--white); line-height:1.5; }
+
+    .achievement-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px; }
+    @media (max-width:900px) { .achievement-grid { grid-template-columns:1fr 1fr; } }
+    @media (max-width:600px) { .achievement-grid { grid-template-columns:1fr; } }
+    .ach-card {
+      background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
+      border-radius:16px; padding:28px 22px;
+      transition:border-color 0.3s,transform 0.3s;
+    }
+    .ach-card:hover { border-color:rgba(67,160,71,0.4); transform:translateY(-5px); }
+    .ach-icon { font-size:34px; margin-bottom:14px; display:block; }
+    .ach-title { font-size:15px; font-weight:800; margin-bottom:8px; }
+    .ach-text  { font-size:13px; color:var(--text-light); line-height:1.6; }
+
+    .quote-block { position:relative; z-index:1; max-width:820px; margin:0 auto; padding:60px 40px; text-align:center; }
+    .quote-mark { font-size:80px; color:var(--accent); line-height:0.6; display:block; margin-bottom:20px; opacity:0.45; font-family:'Playfair Display',serif; }
+    .quote-text { font-family:'Playfair Display',serif; font-size:clamp(16px,2.2vw,24px); font-style:italic; line-height:1.65; color:var(--white); margin-bottom:20px; }
+    .quote-author { font-size:13px; color:var(--text-light); }
+
+    .reveal { opacity:0; transform:translateY(35px); transition:opacity 0.7s ease,transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    footer { position:relative; z-index:1; border-top:1px solid rgba(255,255,255,0.08); padding:30px 40px; text-align:center; }
+    footer p { font-size:13px; color:var(--text-light); }
+    .footer-heart { color:#ef5350; }
+  </style>
+</head>
+<body>
+<canvas id="stars-canvas"></canvas>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">🎓</div>
+    <div class="logo-text">
+      <span>THPT Thành Phố Cao Bằng</span>
+      <span>LỚP 12A8</span>
+    </div>
+  </a>
+  <nav>
+    <a href="thanh-vien.html"><span class="nav-emoji">👥</span> Thành viên</a>
+    <a href="hanh-trinh.html"><span class="nav-emoji">📸</span> Kỷ niệm</a>
+    <a href="dong-gop.html"><span class="nav-emoji">🏆</span> Thành tích</a>
+    <a href="gioi-thieu-truong.html" style="background:rgba(249,168,37,0.2);color:#f9a825;"><span class="nav-emoji">🏫</span> Về trường</a>
+    <a href="blog.html"><span class="nav-emoji">✍️</span> Blog</a>
+    <a href="lien-he.html"><span class="nav-emoji">💌</span> Liên hệ</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <a href="index.html" class="back-link">← Về trang chính</a>
+    <span class="page-emoji">🏫</span>
+    <div class="hero-subtitle">✦ Our School</div>
+    <h1 class="hero-title">Trường THPT Thành Phố Cao Bằng</h1>
+    <p class="hero-desc">Hơn 60 năm xây dựng và phát triển — ngôi trường "cánh chim đầu đàn" của tỉnh Cao Bằng, nơi bao thế hệ học sinh trưởng thành và tỏa sáng.</p>
+  </div>
+</section>
+
+<!-- QUICK STATS -->
+<div style="position:relative;z-index:1;padding:0 40px 80px;">
+  <div class="stats-bar reveal">
+    <div class="stat-item">
+      <span class="stat-icon">📅</span>
+      <span class="stat-val">1961</span>
+      <div class="stat-lbl">Năm thành lập</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon">📍</span>
+      <span class="stat-val">Hợp Giang</span>
+      <div class="stat-lbl">Phường, TP. Cao Bằng</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon">👩‍🏫</span>
+      <span class="stat-val">60+</span>
+      <div class="stat-lbl">Giáo viên</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon">🌟</span>
+      <span class="stat-val">Top 1</span>
+      <div class="stat-lbl">THPT tỉnh Cao Bằng</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- INTRO + GALLERY -->
+<div class="content-section">
+  <div class="two-col">
+    <div class="reveal">
+      <div class="section-tag">✦ Khuôn viên & Lịch sử</div>
+      <h2 class="section-title">Một góc nhỏ thân thương</h2>
+      <p class="section-body">
+        Tọa lạc ngay trung tâm thành phố Cao Bằng, trường có khuôn viên xanh mát với hàng cây cổ thụ, sân rộng và các dãy nhà học khang trang. Đây là nơi bao thế hệ học sinh đã ghi dấu những năm tháng đẹp nhất của tuổi thanh xuân.
+      </p>
+      <div class="info-table">
+        <div class="info-row">
+          <span class="info-icon">📌</span>
+          <div>
+            <div class="info-label">Địa chỉ</div>
+            <div class="info-val">Phường Hợp Giang, TP. Cao Bằng, tỉnh Cao Bằng</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">🏛️</span>
+          <div>
+            <div class="info-label">Thành lập</div>
+            <div class="info-val">Năm 1961 — hơn 60 năm lịch sử vẻ vang</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">💡</span>
+          <div>
+            <div class="info-label">Phương châm</div>
+            <div class="info-val">"Dạy tốt – Học tốt"</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">🌟</span>
+          <div>
+            <div class="info-label">Danh hiệu</div>
+            <div class="info-val">Huân chương Lao động & Bằng khen Thủ tướng Chính phủ, Bộ GD&ĐT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="gallery-grid reveal">
+      <div class="gallery-img tall">
+        <img src="cong-truong.jpg" alt="Cổng trường"/>
+        <div class="img-caption">🚪 Cổng trường THPT Thành Phố Cao Bằng</div>
+      </div>
+      <div class="gallery-img">
+        <img src="khuon-vien.jpg" alt="Khuôn viên trường"/>
+        <div class="img-caption">🌳 Khuôn viên xanh mát</div>
+      </div>
+      <div class="gallery-img">
+        <img src="giao-vien.jpg" alt="Tập thể giáo viên"/>
+        <div class="img-caption">👩‍🏫 Tập thể thầy cô giáo</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- HISTORY -->
+<div class="content-section reveal">
+  <div class="section-tag">✦ Lịch sử & Truyền thống</div>
+  <h2 class="section-title">Hơn 60 năm một chặng đường</h2>
+  <p class="section-body">
+    Trường THPT Thành Phố Cao Bằng được thành lập từ năm 1961, trải qua nhiều giai đoạn phát triển trong lịch sử đất nước. Từ những ngày đầu khó khăn cho đến hôm nay, trường đã không ngừng lớn mạnh và khẳng định vị thế là <strong style="color:var(--white)">"cánh chim đầu đàn"</strong> trong khối THPT của toàn tỉnh.
+    <br/><br/>
+    Qua từng thế hệ thầy cô và học sinh, ngôi trường đã đào tạo hàng nghìn nhân tài cho tỉnh nhà và cả nước — những con người mang trong mình ký ức về mái trường thân yêu giữa lòng thành phố Cao Bằng.
+  </p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ACHIEVEMENTS -->
+<div class="content-section">
+  <div class="section-tag reveal">✦ Thành tích nổi bật</div>
+  <h2 class="section-title reveal">Những điều đáng tự hào</h2>
+  <div class="achievement-grid">
+    <div class="ach-card reveal">
+      <span class="ach-icon">🎓</span>
+      <div class="ach-title">Tỷ lệ tốt nghiệp</div>
+      <div class="ach-text">Luôn nằm trong tốp đầu tỉnh về tỷ lệ học sinh đỗ tốt nghiệp THPT hàng năm.</div>
+    </div>
+    <div class="ach-card reveal">
+      <span class="ach-icon">🏅</span>
+      <div class="ach-title">Học sinh giỏi</div>
+      <div class="ach-text">Thường xuyên đạt giải cao trong các kỳ thi học sinh giỏi cấp Tỉnh và cấp Quốc gia.</div>
+    </div>
+    <div class="ach-card reveal">
+      <span class="ach-icon">🏆</span>
+      <div class="ach-title">Huân chương Lao động</div>
+      <div class="ach-text">Vinh dự nhận Huân chương Lao động và Bằng khen của Thủ tướng Chính phủ, Bộ GD&ĐT.</div>
+    </div>
+    <div class="ach-card reveal">
+      <span class="ach-icon">🏛️</span>
+      <div class="ach-title">Đại học danh tiếng</div>
+      <div class="ach-text">Nhiều học sinh trúng tuyển vào các trường Đại học top đầu cả nước qua từng năm học.</div>
+    </div>
+    <div class="ach-card reveal">
+      <span class="ach-icon">🧪</span>
+      <div class="ach-title">Cơ sở vật chất</div>
+      <div class="ach-text">Phòng thí nghiệm, phòng máy tính hiện đại, sân chơi bãi tập đáp ứng tốt nhu cầu học tập.</div>
+    </div>
+    <div class="ach-card reveal">
+      <span class="ach-icon">🤝</span>
+      <div class="ach-title">Hoạt động ngoại khóa</div>
+      <div class="ach-text">Phong trào Đoàn sôi nổi, CLB văn nghệ, thể thao, tình nguyện phát triển kỹ năng toàn diện.</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- TEACHERS FULL WIDTH PHOTO -->
+<div style="position:relative;z-index:1;padding:60px 40px;">
+  <div style="max-width:1100px;margin:0 auto;" class="reveal">
+    <div class="section-tag">✦ Đội ngũ giáo viên</div>
+    <h2 class="section-title" style="margin-bottom:28px;">Những người lái đò thầm lặng</h2>
+    <div style="border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);position:relative;">
+      <img src="giao-vien.jpg" alt="Tập thể giáo viên THPT Thành Phố Cao Bằng"
+        style="width:100%;max-height:500px;object-fit:cover;display:block;"/>
+      <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(10,22,40,0.9));padding:50px 36px 28px;">
+        <div style="font-size:12px;color:var(--gold);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">👩‍🏫 Tập thể sư phạm</div>
+        <div style="font-size:18px;font-weight:700;max-width:500px;line-height:1.4;">Hơn 60 thầy cô tận tâm — đồng hành cùng học sinh trên mọi chặng đường</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- QUOTE -->
+<div class="quote-block reveal">
+  <span class="quote-mark">"</span>
+  <p class="quote-text">
+    Dưới mái trường THPT Thành Phố Cao Bằng, tập thể lớp 12A8 chúng tôi đã cùng nhau viết nên những kỷ niệm đẹp nhất của tuổi thanh xuân — những năm tháng sẽ mãi khắc sâu trong tim mỗi người.
+  </p>
+  <div class="quote-author">— Lớp 12A8, Niên khóa 2022 – 2025 —</div>
+</div>
+
+<!-- BACK BUTTON -->
+<div style="position:relative;z-index:1;text-align:center;padding:20px 20px 80px;">
+  <a href="index.html" style="
+    display:inline-flex;align-items:center;gap:10px;
+    background:linear-gradient(135deg,#43a047,#f9a825);
+    color:#000;font-weight:800;font-size:15px;
+    padding:16px 40px;border-radius:50px;
+    text-decoration:none;
+    box-shadow:0 4px 24px rgba(67,160,71,0.35);
+    transition:transform 0.25s,box-shadow 0.25s;
+  " onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+    ← Về trang chính
+  </a>
+</div>
+
+<footer>
+  <p>Made with <span class="footer-heart">♥</span> by Đàm Văn Kỳ & Bế Tuấn Bảo · THPT Thành Phố Cao Bằng · 2024–2025</p>
+</footer>
+
+<script>
+  const canvas = document.getElementById('stars-canvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function resize() { canvas.width=innerWidth; canvas.height=innerHeight; }
+  function init() {
+    stars=[];
+    for(let i=0;i<160;i++) stars.push({
+      x:Math.random()*canvas.width, y:Math.random()*canvas.height,
+      r:Math.random()*1.4+0.2, o:Math.random(), s:Math.random()*0.3+0.05, d:Math.random()>.5?1:-1
+    });
+  }
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    stars.forEach(s=>{
+      s.o+=s.s*0.01*s.d; if(s.o>1||s.o<0.1) s.d*=-1;
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${s.o})`; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',()=>{resize();init();});
+  resize(); init(); draw();
+
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e,i) => {
+      if(e.isIntersecting) {
+        setTimeout(()=>e.target.classList.add('visible'),i*100);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold:0.1 });
+  reveals.forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
